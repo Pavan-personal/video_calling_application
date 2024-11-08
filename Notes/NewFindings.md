@@ -1,25 +1,27 @@
-# React Hooks and Context Providers
+# React Hooks & Context Providers
 
 ## Execution Order
 
-- `useEffect` executes after rendering of the component.
-- `useMemo` and `useCallback` execute during the rendering of the component.
+- **`useEffect`**: Executes *after the component rendering*.
+- **`useMemo`** and **`useCallback`**: Execute *during the component rendering*.
 
 ### Order of Execution
 
-1. `useMemo` or `useCallback` (based on position)
-<br/>
-   | <br/>
-   | <br/>
-   V <br/>
-2. `useEffect`
+1. **`useMemo` or `useCallback`** (depending on their position in the component)
+2. **`useEffect`**
+
+---
 
 ## Hook Purposes
 
-- **`useCallback`**: Returns a memoized function.
-- **`useMemo`**: Returns a memoized value.
-- **`useEffect`**: Used for performing side effects.
+| Hook         | Purpose                          |
+|--------------|----------------------------------|
+| `useCallback`| Returns a memoized function      |
+| `useMemo`    | Returns a memoized value         |
+| `useEffect`  | Used for performing side effects |
+
+---
 
 ## Context Providers
 
-Context Providers are used to provide a certain feature or data to the entire app without passing props through every level of the component tree.
+**Role**: Context Providers allow you to share data or features across the app without having to pass props through every component level.
