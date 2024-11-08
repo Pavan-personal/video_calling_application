@@ -1,12 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-const express_1 = __importDefault(require("express"));
-dotenv_1.default.config({
-    path: "./.env",
+var socket_io_1 = require("socket.io");
+var dotenv = require("dotenv");
+dotenv.config({
+    path: "../.env",
 });
-const app = (0, express_1.default)();
-app.listen(process.env.PORT, () => console.log(`Server is runnning on port ${process.env.PORT}`));
+var PORT = parseInt(process.env.SOCKET_PORT || "3000", 10);
+var io = new socket_io_1.Server(PORT, {
+    cors: {
+        origin: "*",
+    },
+});
+io.on("connection", function (socket) {
+    console.log("socket connected", socket.id);
+});

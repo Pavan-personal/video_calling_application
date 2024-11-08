@@ -1,12 +1,18 @@
-import dontenv, { configDotenv } from "dotenv";
-import express from "express";
+import { Server, Socket } from "socket.io";
+import * as dotenv from "dotenv";
 
-configDotenv({
-    path: '../.env'
-})
+dotenv.config({
+  path: "../.env",
+});
 
-const app = express();
+const PORT = parseInt(process.env.SOCKET_PORT || "3000", 10);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server is runnning on port ${process.env.PORT}`)
-);
+const io = new Server(PORT, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket: Socket) => {
+  console.log("socket connected", socket.id);
+});
