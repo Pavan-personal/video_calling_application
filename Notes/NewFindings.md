@@ -8,9 +8,10 @@
 ### Order of Execution
 
 1. `useMemo` or `useCallback` (based on position)
-   |
-   |
-   V
+<br/>
+   | <br/>
+   | <br/>
+   V <br/>
 2. `useEffect`
 
 ## Hook Purposes
