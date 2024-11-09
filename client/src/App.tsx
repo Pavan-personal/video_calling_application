@@ -20,12 +20,17 @@ function App() {
   }, [data]);
 
   const handleUserJoined = useCallback((data: any) => {
-    toast.success(`${data.email} has joined the room`);
+    data?.connection
+      ? toast.success(`${data.email} has joined the room`)
+      : toast.error(`${data.email} has left the room`);
   }, []);
 
   const handleUsersInRoom = useCallback((data: any) => {
     setUsers(data.otherUsers);
     console.log("The users in the room: ", data);
+    if(data?.message){
+      toast.error(data.message);
+    }
   }, []);
 
   const handleSelfJoin = useCallback((data: any) => {

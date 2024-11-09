@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import * as dotenv from "dotenv";
+import { connect } from "http2";
 
 dotenv.config({
   path: "../.env",
@@ -27,19 +28,31 @@ io.on("connection", (socket: Socket) => {
     SocketIdToEmail.set(socket?.id, data?.email);
 
     socket.join(room);
-    socket.to(room)?.emit("user:joined", { email, room });
+    socket.to(room)?.emit("user:joined", { email, room,connection: true });
 
     io.to(socket?.id).emit("room:join", {
       message: "You have joined the room",
       data: data,
     });
 
-    const usersInRoom = Array.from(io.sockets.adapter.rooms.get(room) || []).map(
-      (socketId) => SocketIdToEmail.get(socketId)
-    );
+    const usersInRoom = Array.from(
+      io.sockets.adapter.rooms.get(room) || []
+    ).map((socketId) => SocketIdToEmail.get(socketId));
 
     io.to(room).emit("room:users", {
       otherUsers: usersInRoom,
+    });
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
+      socket.to(room).emit("room:users", {
+        otherUsers: Array.from(io.sockets.adapter.rooms.get(room) || []).map(
+          (socketId) => SocketIdToEmail.get(socketId)
+        ),
+        message: `${SocketIdToEmail.get(socket.id)} has left the room`,
+      });
+      EmailToSocketId.delete(SocketIdToEmail.get(socket.id) || "");
+      SocketIdToEmail.delete(socket.id);
     });
   });
 });
